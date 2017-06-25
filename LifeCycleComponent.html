@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<main id="app"></main>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.js"></script>
+
+	<script type="text/babel">
+
+	function Hola(props){
+		return(
+			<h1 id="Title" onClick={props.onClick}>
+				Hola {props.name} {props.count}
+			</h1>
+		);
+	}
+		
+	class MiComponente extends React.Component{
+		
+		constructor(props){
+			super(props);
+
+			this.state = {
+				count: 0,
+			};
+
+            // hacer siempre el BIND desde el constructor
+			this.handleClick = this.handleClick.bind(this);
+		}
+
+        componentWillMount(){
+            console.log('El componente se va a montar');
+        }
+
+        componentDidMount(){
+            document.addEventListener('click', this.handleClick);
+        }
+
+        componentWillReceiveProps(nextProps){
+            this.setState({
+                count: this.state.count * 2
+            })
+        }
+
+        shouldComponentUpdate(nextProps, nextState){
+            if(nextState.count !== this.state.count) return true;
+            return false;
+        }
+
+        componentWillUpdate(){
+            console.log('El componente se va a actualizar');
+        }
+
+        componentDidUpdate(){
+            console.log('El componente se actualizó');
+        }
+
+        componentWillUnmount(){
+            document.removeEventListener('click', this.handleClick);
+        }
+
+		handleClick(){
+			this.setState({
+				count: this.state.count + 1,
+			});
+		}
+
+		render(){
+			return (
+				<Hola
+					name = {this.props.name}
+					count = {this.state.count}
+					onClick = {this.handleClick}
+				/>
+			);
+		}
+	}
+
+	ReactDOM.render(
+		<MiComponente name="Tefa"/>,
+		document.getElementById('app')
+	);
+
+	</script>
+
+</body>
+</html>
